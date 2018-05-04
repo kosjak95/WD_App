@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".SimpleActivity"
+    tools:showIn="@layout/activity_simple">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <TextView
+            android:id="@+id/label1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="95dp"
+            android:text="@string/percents_start"
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="164dp"
+            tools:layout_editor_absoluteY="84dp" />
+
+        <TextView
+            android:id="@+id/textOutput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="21dp"
+            android:text="0"
+            android:textAlignment="center"
+            android:textSize="50sp" />
+
+        <EditText
+            android:id="@+id/editPercents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="147dp"
+            android:ems="10"
+            android:hint="your percent"
+            android:inputType="numberSigned"
+            android:selectAllOnFocus="false"
+            android:singleLine="false"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="231dp"
+            android:text="OF" />
+
+        <EditText
+            android:id="@+id/editNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="176dp"
+            android:ems="10"
+            android:hint="your number"
+            android:inputType="numberSigned"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/bCalculate"
+            android:layout_width="236dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="71dp"
+            android:background="@color/colorRed"
+            android:onClick="clickCalculate"
+            android:text="Calcualte!"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="71dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/editPercents"
+            android:layout_toEndOf="@+id/editPercents"
+            android:text="%"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

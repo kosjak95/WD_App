@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">WD_App</string>
     <string name="action_settings">Settings</string>
+    <string name="percents">Percentage App</string>
+    <string name="link">Go</string>
+    <string name="title_activity_simple">SimpleActivity</string>
+    <string name="percents_start">What is...</string>
 </resources>
