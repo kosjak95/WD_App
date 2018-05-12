@@ -5,4 +5,6 @@
     <string name="link">Go</string>
     <string name="title_activity_simple">SimpleActivity</string>
     <string name="percents_start">What is...</string>
+    <string name="action_save">Save</string>
+    <string name="title_activity_note">NoteActivity</string>
 </resources>
