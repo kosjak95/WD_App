@@ -19,7 +19,7 @@
             app:layout_anchorGravity="top|center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/vertical_margin"
             android:text="@string/main_hello"
             android:textSize="20sp"
             />
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:layout_anchorGravity="center_horizontal|bottom"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
             android:onClick="onClick"
             android:text="@string/view_my_gropus"
             app:layout_constraintStart_toStartOf="parent"

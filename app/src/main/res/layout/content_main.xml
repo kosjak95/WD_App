@@ -8,47 +8,4 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <Button
-        android:id="@+id/btnCenter"
-        android:text="Center"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <!--<TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/main_hello"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.458"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.14999998" />
-
-    <Button
-        android:id="@+id/button_join"
-        android:layout_width="148dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="105dp"
-        android:layout_marginStart="105dp"
-        android:layout_marginTop="88dp"
-        android:onClick="onClick"
-        android:text="@string/button_add_to_group"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/button_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|center"
-        app:layout_anchorGravity="right|center_vertical"
-        android:onClick="onClick"
-        android:text="@string/view_my_gropus"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_join" />-->
-
 </android.support.constraint.ConstraintLayout>

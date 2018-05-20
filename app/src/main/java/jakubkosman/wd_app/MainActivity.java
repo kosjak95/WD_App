@@ -10,13 +10,15 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String user_index;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        user_index=getIntent().getStringExtra("indexKey");
     }
 
     @Override
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.button_view:
                 intent = new Intent(MainActivity.this, ViewGroupsActivity.class);
+                intent.putExtra("indexKey",user_index);
                 startActivity(intent);
                 break;
             

@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private DatabaseHelper databaseHelper;
+    private static String user_index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +192,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
             if(databaseHelper.checkUser(temp_index,temp_password)) {
                 showProgress(true);
+                user_index=temp_index;
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("indexKey",user_index);
                 startActivity(intent);
             }
             else
@@ -299,6 +302,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mIndexView.setAdapter(adapter);
+    }
+
+    public static String getUser_index() {
+        return user_index;
     }
 
 
