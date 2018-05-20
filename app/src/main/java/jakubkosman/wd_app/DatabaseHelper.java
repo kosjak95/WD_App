@@ -11,9 +11,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "WD.db";
     private static final String TABLE_NAME = "students";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_INDEX = "nr_index";
-    private static final String COLUMN_PESEL = "pesel";
+    private static final String COLUMN_ID = "ID";
+    private static final String COLUMN_INDEX = "NR_INDEX";
+    private static final String COLUMN_PESEL = "PESEL";
     SQLiteDatabase db;
     //private static final String TABLE_CREATE = "create table students ( ID INTEGER PRIMARY KEY AUTOINCREMENT, "+
      //       "nr_index text not null , pesel text not null);";
@@ -25,7 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, NR_INDEX TEXT, PESEL TEXT)");
+        db.execSQL("create table " + TABLE_NAME + "("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COLUMN_INDEX+" TEXT, "+
+                COLUMN_PESEL+" TEXT)");
     }
 
     public void insertStudent()
@@ -33,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db=this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        String query = "SELECT * From students";
+        String query = "SELECT * From "+TABLE_NAME;
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();
 
@@ -45,7 +46,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
+    /*
+     *  Function returns true if user's index and password are correct
+     *  */
+    public boolean checkUser(String index, String password)
+    {
+        db=this.getWritableDatabase();
+        String query = "SELECT "+COLUMN_ID+" FROM "+TABLE_NAME+" WHERE "+COLUMN_INDEX+" = '"+index+"' AND "+COLUMN_PESEL+" = '"+password+"'";
+        Cursor cursor = db.rawQuery(query,null);
+        int count = cursor.getCount();
+        if(count>0)
+            return true;
+        else
+            return false;
+    }
 
 
     @Override

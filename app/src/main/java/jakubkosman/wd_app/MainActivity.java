@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View view)
     {
-        Intent intent = null;
+        Intent intent;
         switch (view.getId())
         {
             case R.id.button_join:

@@ -65,9 +65,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private DatabaseHelper databaseHelper;
 
-    private String indeks = "128629";
-    private String pesel = "12345678900";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            if(temp_index.equals(indeks) && temp_password.equals(pesel)) {
+            if(databaseHelper.checkUser(temp_index,temp_password)) {
                 showProgress(true);
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -218,7 +215,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
 
-        if(password.length() != 11) {
+        if(password.length() < 8) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             return false;
         }
