@@ -304,11 +304,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mIndexView.setAdapter(adapter);
     }
 
-    public static String getUser_index() {
-        return user_index;
-    }
-
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,

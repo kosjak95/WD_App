@@ -9,6 +9,7 @@ import android.graphics.Point;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -91,5 +92,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "DROP TABLE IF EXISTS " + STUDENT_TABLE;
         db.execSQL(query);
         this.db = db;
+    }
+
+    public List<String> getSubjects() {
+
+        List<String> list = new ArrayList<>();
+
+        //TODO: get subjects from db
+        list.add("Pierwszy przedmiot");
+        list.add("Drugi przedmiot");
+
+        return list;
     }
 }

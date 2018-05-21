@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="spinner_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">36dp</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">370dp</item>
+        <item name="android:background">@drawable/spinner_gradient</item>
+    </style>
+</resources>
