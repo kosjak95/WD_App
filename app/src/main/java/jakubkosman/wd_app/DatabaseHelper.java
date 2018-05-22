@@ -27,6 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_SUBJECT = "SUBJECT";
     private static final String SUBJECT_ID_FOREIGN = "SUBJECT_ID";
 
+
     SQLiteDatabase db;
     //private static final String TABLE_CREATE = "create table students ( ID INTEGER PRIMARY KEY AUTOINCREMENT, "+
      //       "nr_index text not null , pesel text not null);";
@@ -51,13 +52,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table " + GROUP_TABLE
                 + "("+COLUMN_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
-                + SUBJECT_ID_FOREIGN +" INT, "
+                + SUBJECT_ID_FOREIGN +" INTEGER, "
                 + COLUMN_GROUP_SIGNATURE+" TEXT, "
                 + COLUMN_GROUP_VACANCY +" INTEGER,"
                 + " FOREIGN KEY ("+SUBJECT_ID_FOREIGN+") REFERENCES "+SUBJECT_TABLE+"("+COLUMN_ID+"))");
 
 
-        db.execSQL("create table connector ( id SMALLINT NOT NULL PRIMARY KEY, studentID SMALLINT NOT NULL, groupID SMALLINT NOT NULL)");
+        db.execSQL("create table connector ( ID INTEGER NOT NULL PRIMARY KEY, " +
+                "studentID INTEGER, " +
+                "groupID INTEGER, " +
+                "FOREIGN KEY (studentID) REFERENCES students(ID), " +
+                "FOREIGN KEY (groupID) REFERENCES groups(ID))");
 
         //db.execSQL("ALTER TABLE conncetor ADD CONSTRAINT stud FOREGIN KEY stud(studentID) REFERENCES students(ID) ON UPDATE RESTRICT ON DELETE RESTRICT");
         //db.execSQL("ALTER TABLE conncetor ADD CONSTRAINT gr FOREGIN KEY gr(groupID) REFERENCES groups(ID) ON UPDATE RESTRICT ON DELETE RESTRICT");
@@ -113,8 +118,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert(GROUP_TABLE, null, values);
         db.close();
-    }
 
+
+    }
+    public void insertConnector()
+    {
+        db=this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String query = "SELECT * FROM connector";
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+
+        values.put("ID", count);
+        values.put("studentID", 0);
+        values.put("groupID", 0);
+
+        db.insert("connector", null, values);
+        db.close();
+    }
     public Map<String,String> getGroupsByStudentIndex(String index)
     {
         HashMap result = new HashMap<String,String>() {};
