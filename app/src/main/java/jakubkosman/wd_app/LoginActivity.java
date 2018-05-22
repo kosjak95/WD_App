@@ -98,7 +98,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
 
         databaseHelper = new DatabaseHelper(this);
-        //databaseHelper.insertStudent();
+        databaseHelper.insertStudent();
+        databaseHelper.insertSubject();
+        databaseHelper.insertGroup();
     }
 
     private void populateAutoComplete() {
@@ -218,7 +220,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
 
-        if(password.length() < 8) {
+        //PESEL GOT 11 numbers.
+        if(password.length() != 11) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             return false;
         }

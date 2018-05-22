@@ -23,29 +23,30 @@
         android:layout_height="wrap_content">
 
         <TableRow
-            android:layout_height="wrap_content"
+            android:id="@+id/table_view_group"
             android:layout_width="match_parent"
-            android:id="@+id/table_row1"
+            android:layout_height="wrap_content"
             android:padding="10dp">
 
             <TextView
                 android:id="@+id/name"
-                android:fontFamily="serif"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="serif"
                 android:gravity="center"
-                android:textColor="#000"
-                android:text="@string/subject"/>
+                android:text="@string/subject"
+                android:textColor="#000" />
+
             <TextView
                 android:id="@+id/age"
-                android:textColor="#000"
-                android:fontFamily="serif"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/group"/>
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/group"
+                android:textColor="#000" />
 
         </TableRow>
         <View

@@ -20,12 +20,14 @@ import java.util.Map;
 
 public class ViewGroupsActivity extends AppCompatActivity {
 
+    private TableLayout tableLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_groups);
 
-        TableLayout layout = findViewById(R.id.table_layout);
+        tableLayout = (TableLayout)findViewById(R.id.table_layout);
 
         String index = this.getIntent().getStringExtra("indexKey");
 
@@ -37,20 +39,30 @@ public class ViewGroupsActivity extends AppCompatActivity {
         {
             TableRow row = new TableRow(this);
 
-            layout.setGravity(Gravity.CENTER);
-
             TextView subject = new TextView(this.getApplicationContext());
             subject.setTextSize(20);
+            subject.setTextColor(Color.BLACK);
             subject.setText(entry.getKey());
+
 
             TextView group = new TextView(this.getApplicationContext());
             group.setTextSize(20);
+            group.setTextColor(Color.BLACK);
             group.setText(entry.getValue());
 
             row.addView(subject);
             row.addView(group);
 
-            layout.addView(row);
+            TableRow.LayoutParams params = (TableRow.LayoutParams)subject.getLayoutParams();
+            TableRow.LayoutParams params1 = (TableRow.LayoutParams)group.getLayoutParams();
+            params.weight = 1;
+            params1.weight = 1;
+            subject.setLayoutParams(params);
+            group.setLayoutParams(params1);
+
+            subject.setGravity(Gravity.CENTER);
+            group.setGravity(Gravity.CENTER);
+            tableLayout.addView(row);
         }
     }
 }

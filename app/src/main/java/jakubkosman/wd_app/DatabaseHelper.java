@@ -23,7 +23,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_INDEX = "NR_INDEX";
     private static final String COLUMN_PESEL = "PESEL";
     private static final String COLUMN_GROUP_SIGNATURE = "SIGNATURE";
+    private static final String COLUMN_GROUP_VACANCY = "VACANCY";
     private static final String COLUMN_SUBJECT = "SUBJECT";
+    private static final String SUBJECT_ID_FOREIGN = "SUBJECT_ID";
 
     SQLiteDatabase db;
     //private static final String TABLE_CREATE = "create table students ( ID INTEGER PRIMARY KEY AUTOINCREMENT, "+
@@ -34,14 +36,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db = this.getWritableDatabase();
     }
 
+    //Create needed tables for activity
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + STUDENT_TABLE + "("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COLUMN_INDEX+" TEXT, "+
-                COLUMN_PESEL+" TEXT)");
+        db.execSQL("create table " + STUDENT_TABLE
+                + "("+COLUMN_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+                +COLUMN_INDEX+" TEXT, "
+                + COLUMN_PESEL+" TEXT)");
 
-        db.execSQL("create table " + GROUP_TABLE +"("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COLUMN_GROUP_SIGNATURE+" TEXT)");
+        db.execSQL("create table " + SUBJECT_TABLE
+                +"("+COLUMN_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+                +COLUMN_SUBJECT+" TEXT)");
 
-        db.execSQL("create table " + SUBJECT_TABLE +"("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COLUMN_SUBJECT+" TEXT)");
+        db.execSQL("create table " + GROUP_TABLE
+                + "("+COLUMN_ID+" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+                + SUBJECT_ID_FOREIGN +" INT, "
+                + COLUMN_GROUP_SIGNATURE+" TEXT, "
+                + COLUMN_GROUP_VACANCY +" INTEGER,"
+                + " FOREIGN KEY ("+SUBJECT_ID_FOREIGN+") REFERENCES "+SUBJECT_TABLE+"("+COLUMN_ID+"))");
+
+
+        db.execSQL("create table connector ( id SMALLINT NOT NULL PRIMARY KEY, studentID SMALLINT NOT NULL, groupID SMALLINT NOT NULL)");
+
+        //db.execSQL("ALTER TABLE conncetor ADD CONSTRAINT stud FOREGIN KEY stud(studentID) REFERENCES students(ID) ON UPDATE RESTRICT ON DELETE RESTRICT");
+        //db.execSQL("ALTER TABLE conncetor ADD CONSTRAINT gr FOREGIN KEY gr(groupID) REFERENCES groups(ID) ON UPDATE RESTRICT ON DELETE RESTRICT");
+
+
     }
 
     public void insertStudent()
@@ -55,9 +76,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         values.put(COLUMN_ID, count);
         values.put(COLUMN_INDEX, "128629");
-        values.put(COLUMN_PESEL, "1234567890");
+        values.put(COLUMN_PESEL, "12345678900");
 
         db.insert(STUDENT_TABLE, null, values);
+        db.close();
+    }
+    public void insertSubject()
+    {
+        db=this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String query = "SELECT * From "+SUBJECT_TABLE;
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+
+        values.put(COLUMN_ID, count);
+        values.put(COLUMN_SUBJECT, "Angielski");
+
+        db.insert(SUBJECT_TABLE, null, values);
+        db.close();
+    }
+
+    public void insertGroup()
+    {
+        db=this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String query = "SELECT * From "+GROUP_TABLE;
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+
+        values.put(COLUMN_ID, count);
+        values.put(COLUMN_GROUP_SIGNATURE, "GR01");
+        values.put(COLUMN_GROUP_VACANCY, 30);
+        values.put(SUBJECT_ID_FOREIGN, 0);
+
+        db.insert(GROUP_TABLE, null, values);
         db.close();
     }
 
