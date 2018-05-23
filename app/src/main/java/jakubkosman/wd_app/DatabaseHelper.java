@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Point;
+import android.view.View;
 
+import java.security.Signature;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,11 +28,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_GROUP_VACANCY = "VACANCY";
     private static final String COLUMN_SUBJECT = "SUBJECT";
     private static final String SUBJECT_ID_FOREIGN = "SUBJECT_ID";
-
+    private static final String CONNECTOR_TABLE = "connector";
 
     SQLiteDatabase db;
-    //private static final String TABLE_CREATE = "create table students ( ID INTEGER PRIMARY KEY AUTOINCREMENT, "+
-     //       "nr_index text not null , pesel text not null);";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -58,21 +58,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " FOREIGN KEY ("+SUBJECT_ID_FOREIGN+") REFERENCES "+SUBJECT_TABLE+"("+COLUMN_ID+"))");
 
 
-        db.execSQL("create table connector ( ID INTEGER NOT NULL PRIMARY KEY, " +
-                "studentID INTEGER, " +
-                "groupID INTEGER, " +
-                "FOREIGN KEY (studentID) REFERENCES students(ID), " +
-                "FOREIGN KEY (groupID) REFERENCES groups(ID))");
-
-        //db.execSQL("ALTER TABLE conncetor ADD CONSTRAINT stud FOREGIN KEY stud(studentID) REFERENCES students(ID) ON UPDATE RESTRICT ON DELETE RESTRICT");
-        //db.execSQL("ALTER TABLE conncetor ADD CONSTRAINT gr FOREGIN KEY gr(groupID) REFERENCES groups(ID) ON UPDATE RESTRICT ON DELETE RESTRICT");
+        db.execSQL("create table " + CONNECTOR_TABLE
+                + " ( "+COLUMN_ID+" INTEGER NOT NULL PRIMARY KEY, "
+                + "studentID INTEGER, "
+                + "groupID INTEGER, "
+                + "FOREIGN KEY (studentID) REFERENCES students(ID), "
+                + "FOREIGN KEY (groupID) REFERENCES groups(ID))");
 
 
     }
 
     public void insertStudent()
     {
-        db=this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         String query = "SELECT * From "+STUDENT_TABLE;
@@ -88,7 +85,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public void insertSubject()
     {
-        db=this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         String query = "SELECT * From "+SUBJECT_TABLE;
@@ -96,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int count = cursor.getCount();
 
         values.put(COLUMN_ID, count);
-        values.put(COLUMN_SUBJECT, "Angielski");
+        values.put(COLUMN_SUBJECT, "Programowanie");
 
         db.insert(SUBJECT_TABLE, null, values);
         db.close();
@@ -104,7 +100,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void insertGroup()
     {
-        db=this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         String query = "SELECT * From "+GROUP_TABLE;
@@ -114,7 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_ID, count);
         values.put(COLUMN_GROUP_SIGNATURE, "GR01");
         values.put(COLUMN_GROUP_VACANCY, 30);
-        values.put(SUBJECT_ID_FOREIGN, 0);
+        values.put(SUBJECT_ID_FOREIGN, 1);
 
         db.insert(GROUP_TABLE, null, values);
         db.close();
@@ -123,27 +118,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public void insertConnector()
     {
-        db=this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        String query = "SELECT * FROM connector";
+        String query = "SELECT * FROM " + CONNECTOR_TABLE;
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();
 
         values.put("ID", count);
         values.put("studentID", 0);
-        values.put("groupID", 0);
+        values.put("groupID", 1);
 
-        db.insert("connector", null, values);
+        db.insert(CONNECTOR_TABLE, null, values);
         db.close();
     }
     public Map<String,String> getGroupsByStudentIndex(String index)
     {
         HashMap result = new HashMap<String,String>() {};
 
-        //TODO: get groups from db
-        result.put("Pierwszy","Drugi");
+        String query = "SELECT "+COLUMN_ID+" FROM "+STUDENT_TABLE+" WHERE "+COLUMN_INDEX+" = '"+index+"'";
+        Cursor user_id = db.rawQuery(query, null);
 
+        int id_user = user_id.getColumnIndex(COLUMN_ID);
+
+        query = "SELECT s."+ COLUMN_SUBJECT+ ", g."+COLUMN_GROUP_SIGNATURE+" FROM "+SUBJECT_TABLE+" as s, "+GROUP_TABLE+ " as g, " + CONNECTOR_TABLE + " as c WHERE c.ID = "+id_user+" AND s.ID = g.SUBJECT_ID";
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        String[] groups = new String[c.getCount()];
+
+        while(!c.isAfterLast())
+        {
+            String subject = c.getString(c.getColumnIndex(COLUMN_SUBJECT));
+            String signature = c.getString(c.getColumnIndex(COLUMN_GROUP_SIGNATURE));
+
+            c.moveToNext();
+
+            result.put(subject, signature);
+        }
+        c.close();
         return result;
     }
 
@@ -152,7 +165,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *  */
     public boolean checkUser(String index, String password)
     {
-        db=this.getWritableDatabase();
         String query = "SELECT "+COLUMN_ID+" FROM "+STUDENT_TABLE+" WHERE "+COLUMN_INDEX+" = '"+index+"' AND "+COLUMN_PESEL+" = '"+password+"'";
         Cursor cursor = db.rawQuery(query,null);
         int count = cursor.getCount();
@@ -174,10 +186,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         List<String> list = new ArrayList<>();
 
-        //TODO: get subjects from db
-        list.add("Pierwszy przedmiot");
-        list.add("Drugi przedmiot");
+        String query = "SELECT "+ COLUMN_SUBJECT + " FROM " + SUBJECT_TABLE;
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        while(!c.isAfterLast())
+        {
+            String subject = c.getString(c.getColumnIndex(COLUMN_SUBJECT));
+            list.add(subject);
+
+            c.moveToNext();
+        }
+        return list;
+    }
+
+    public List<String> getGroupsBySubject(String subject)
+    {
+        List<String> list = new ArrayList<>();
+
+        String query = "SELECT " + COLUMN_ID + " FROM " + SUBJECT_TABLE + " WHERE " + COLUMN_SUBJECT+" = '"+subject+"'";
+        Cursor sub_q = db.rawQuery(query, null);
+
+        int id_sub = sub_q.getColumnIndex(COLUMN_ID);
+
+        query = "SELECT g." + COLUMN_GROUP_SIGNATURE + " FROM " + GROUP_TABLE + " as g," + SUBJECT_TABLE + " as s WHERE s.ID =" + id_sub;
+
+        sub_q = db.rawQuery(query, null);
+        sub_q.moveToFirst();
+
+        while (!sub_q.isAfterLast())
+        {
+
+            String signature = sub_q.getString(sub_q.getColumnIndex(COLUMN_GROUP_SIGNATURE));
+            list.add(signature);
+            sub_q.moveToNext();
+        }
 
         return list;
+    }
+
+    public boolean isVacancy(String subject, String group) {
+
+        String query ="";
+
+        return true;
+
     }
 }

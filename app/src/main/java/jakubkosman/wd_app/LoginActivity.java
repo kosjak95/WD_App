@@ -98,10 +98,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
 
         databaseHelper = new DatabaseHelper(this);
-        databaseHelper.insertStudent();
-        databaseHelper.insertSubject();
-        databaseHelper.insertGroup();
-        databaseHelper.insertConnector();
+        //databaseHelper.insertStudent();
+//        databaseHelper.insertSubject();
+//        databaseHelper.insertGroup();
+//        databaseHelper.insertConnector();
     }
 
     private void populateAutoComplete() {
