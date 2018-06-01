@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         {
             case R.id.button_join:
                 intent = new Intent(MainActivity.this, JoinGroupActivity.class);
+                intent.putExtra("indexKey", user_index);
                 startActivity(intent);
                 break;
             case R.id.button_view:

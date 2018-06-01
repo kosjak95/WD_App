@@ -16,11 +16,14 @@ public class JoinGroupActivity extends AppCompatActivity {
 
     private Spinner spinnerSubjects;
     private Spinner spinnerGroups;
+    private String index = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_group);
+
+        index = this.getIntent().getStringExtra("indexKey");
 
         List<String> spinnerItems = new DatabaseHelper(this).getSubjects();
 
@@ -57,9 +60,15 @@ public class JoinGroupActivity extends AppCompatActivity {
     public void onClick(View view)
     {
         DatabaseHelper db = new DatabaseHelper(this);
-        if(db.isVacancy(spinnerSubjects.getSelectedItem().toString(),spinnerGroups.getSelectedItem().toString()))
-        {
+        String subject = spinnerSubjects.getSelectedItem().toString();
+        String group = spinnerGroups.getSelectedItem().toString();
 
+        if(db.isVacancy(subject,group))
+        {
+            int output = db.joinStudentToGroup(index, subject, group);
+
+            if(output == 1)
+                Toast.makeText(getApplicationContext(), "Juz jesteś w tej grupie", Toast.LENGTH_LONG).show();
         }
         else
         {

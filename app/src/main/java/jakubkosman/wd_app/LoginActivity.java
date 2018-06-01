@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         databaseHelper = new DatabaseHelper(this);
         //databaseHelper.insertStudent();
 //        databaseHelper.insertSubject();
-//        databaseHelper.insertGroup();
+        //databaseHelper.insertGroup();
 //        databaseHelper.insertConnector();
     }
 
