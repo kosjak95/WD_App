@@ -130,20 +130,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     Insert new connection between Student and Group
      */
-    public void insertConnector()
+    public void insertConnector(int student_id, int group_id)
+    //public void insertConnector()
     {
         ContentValues values = new ContentValues();
 
         String query = "SELECT * FROM " + CONNECTOR_TABLE;
         Cursor cursor = db.rawQuery(query, null);
-        int count = cursor.getCount();
 
-        values.put("ID", count);
-        values.put("studentID", 0);
-        values.put("groupID", 1);
+        cursor.moveToLast();
+
+        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+        //@DONE: tutaj nie mozna brac counta, bo jak bedziemy przepisywac gosci, to pewnie sypną sie idiki, i wtedy count nie bedzie pokrywal się z tym jaki powinien zostać wstawiony nastepny  ....???
+
+        values.put("ID", id+1);
+        values.put("studentID", student_id);
+        values.put("groupID", group_id);
 
         db.insert(CONNECTOR_TABLE, null, values);
         db.close();
+    }
+    public void delete()
+    {
+        db.execSQL("DELETE FROM connector WHERE ID > 1");
     }
 
     /*
@@ -291,13 +301,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     Insert new row to database - it join student to group;
     Returns:
-    0 - already in this group,
-    1 - in group from this subject but changed,
-    2 - just added.
+    0 - error
+    1 - already in this group,
+    2 - in group from this subject but changed,
+    3 - just added.
      */
     public int joinStudentToGroup(String index, String subject, String group)
     {
-        // nie tak. sprawdz czy ten student jest juz z tego przedmiotu w grupie, lub czy jest już w dokładnie tej grupie, lub jeśli go nie ma to dopisać -> 3x Toast
         String query = "SELECT " + COLUMN_ID + " FROM " + STUDENT_TABLE + " WHERE " + COLUMN_INDEX + " = '" + index + "'";
         Cursor cursor = db.rawQuery(query, null);
 
@@ -319,9 +329,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if(isInThisGroup(user_id, group_id))
             return 1;
-
-        return 0;
+        else if(isInGroupOfThisSubject(user_id, subject_id, group_id))
+            return 2;
+        else //if(!isInGroupOfThisSubject(user_id, subject_id, group_id))
+        {
+            insertConnector(user_id, group_id);
+            return 3;
+        }
+//        return 0;
     }
+
+    /*
+    funciotn check if user is in given group
+     */
     private boolean isInThisGroup(int user_id, int group_id)
     {
         String query = "SELECT * FROM " + CONNECTOR_TABLE + " WHERE studentID = " + user_id + " AND groupID = " + group_id;
@@ -332,6 +352,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(cursor.getCount()>0)
             return true;
 
+        return false;
+    }
+
+    /*
+    function check if user is in group from this subject,
+    if true, function should remove him from actual and join to given,
+    return true if succesfull
+     */
+    //@DONE DEBUG IF THIS IS WORKING PROPPER, AND AFTER DELETE WE HAVE TO INSERT NEW VALUE
+    private boolean isInGroupOfThisSubject(int user_id, int subject_id, int group_id)
+    {
+        String query = "SELECT " + COLUMN_ID + " FROM " + GROUP_TABLE + " WHERE " + SUBJECT_ID_FOREIGN + " = " + subject_id;
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+
+        while(!cursor.isAfterLast())
+        {
+            int temp_group = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+            String q = "SELECT * FROM " + CONNECTOR_TABLE + " WHERE studentID = " + user_id + " AND groupID = " + temp_group;
+            Cursor temp_cursor = db.rawQuery(q, null);
+            temp_cursor.moveToFirst();
+
+            if(temp_cursor.getCount() > 0)
+            {
+                String id = Integer.toString(temp_group);
+                db.delete(CONNECTOR_TABLE, COLUMN_ID + " =?", new String[]{id});
+
+                insertConnector(user_id, group_id);
+
+                return true;
+
+            }
+
+
+            cursor.moveToNext();
+        }
         return false;
     }
 }
