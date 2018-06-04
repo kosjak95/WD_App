@@ -131,7 +131,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     Insert new connection between Student and Group
      */
     public void insertConnector(int student_id, int group_id)
-    //public void insertConnector()
     {
         ContentValues values = new ContentValues();
 
@@ -149,11 +148,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("groupID", group_id);
 
         db.insert(CONNECTOR_TABLE, null, values);
+        changeVaccancy(group_id, false);
         db.close();
+    }
+    /*
+    function change vaccancy of group by 1,
+    increase = true then increase, else ...
+     */
+    private void changeVaccancy(int group_id, boolean increase)
+    {
+        String query = "SELECT * FROM " + GROUP_TABLE + " WHERE " + COLUMN_ID + " = " + group_id;
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+
+        int vaccancy = cursor.getInt(cursor.getColumnIndex(COLUMN_GROUP_VACANCY));
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_GROUP_VACANCY, increase?++vaccancy:--vaccancy);
+        String row = String.valueOf(group_id);
+
+        db.update(GROUP_TABLE, values, COLUMN_ID + "=?", new String[]{row});
     }
     public void delete()
     {
-        db.execSQL("DELETE FROM connector WHERE ID > 1");
+        db.execSQL("DELETE FROM connector WHERE ID > 0");
     }
 
     /*
@@ -165,13 +184,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //jak zacznie zawsze dodawac studenta 0 to spradz query na debugu bo pewnie jest źle
         String query = "SELECT "+COLUMN_ID+" FROM "+STUDENT_TABLE+" WHERE "+COLUMN_INDEX+" = '"+index+"'";
-        Cursor user_id = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, null);
 
-        int id_user = user_id.getColumnIndex(COLUMN_ID);
+        cursor.moveToFirst();
+        int id_user = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
 
-        query = "SELECT s."+ COLUMN_SUBJECT+ ", g."+COLUMN_GROUP_SIGNATURE+" FROM "+SUBJECT_TABLE+" as s, "+GROUP_TABLE+ " as g, " + CONNECTOR_TABLE + " as c WHERE c.ID = "+id_user+" AND s.ID = g.SUBJECT_ID";
-
-//        SELECT s.SUBJECT, g.SIGNATURE FROM GROUPS as g, STUDENTS as stud, SUBJECTS as S, connector as c, GROUPS as g INNER JOIN SUBJECTS as s ON g.SUBJECT_ID = s.ID, connector as c INNER JOIN STUDENTS as stud ON c.STUDENT_ID = stud.ID, GROUPS as g INNER JOIN connector as c ON c.GROUP_ID = g.ID WHERE stud.NR_INDEX = '128629'
+        //query = "SELECT s."+ COLUMN_SUBJECT+ ", g."+COLUMN_GROUP_SIGNATURE+" FROM "+SUBJECT_TABLE+" as s, "+GROUP_TABLE+ " as g, " + CONNECTOR_TABLE + " as c WHERE c.ID = "+id_user+" AND s.ID = g.SUBJECT_ID";
+        query = "SELECT * FROM " + CONNECTOR_TABLE + " WHERE studentID = " + id_user;
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
@@ -180,15 +199,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         while(!c.isAfterLast())
         {
-            String subject = c.getString(c.getColumnIndex(COLUMN_SUBJECT));
-            String signature = c.getString(c.getColumnIndex(COLUMN_GROUP_SIGNATURE));
+            int  group_id = c.getInt(c.getColumnIndex("groupID"));
+            query = "SELECT * FROM " + GROUP_TABLE + " WHERE " + COLUMN_ID + " = " + group_id;
+            cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            String signature = cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_SIGNATURE));
+
+
+            query = "SELECT " + COLUMN_SUBJECT + " FROM " + SUBJECT_TABLE + " WHERE " + COLUMN_ID + " = " + cursor.getInt(cursor.getColumnIndex(SUBJECT_ID_FOREIGN));
+            cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            String subject = cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT));
+            result.put(subject, signature);
 
             c.moveToNext();
-
-            result.put(subject, signature);
         }
         c.close();
-        user_id.close();
+        cursor.close();
         return result;
     }
 
@@ -381,6 +408,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String id = Integer.toString(temp_group);
                 db.delete(CONNECTOR_TABLE, COLUMN_ID + " =?", new String[]{id});
 
+                changeVaccancy(temp_group, true);
                 insertConnector(user_id, group_id);
 
                 return true;

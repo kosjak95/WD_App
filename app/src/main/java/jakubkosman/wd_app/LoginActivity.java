@@ -102,6 +102,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //        databaseHelper.insertSubject();
         //databaseHelper.insertGroup();
 //        databaseHelper.insertConnector();
+        //databaseHelper.delete();
     }
 
     private void populateAutoComplete() {

@@ -70,21 +70,16 @@ public class JoinGroupActivity extends AppCompatActivity {
             if(output == 1)
                 Toast.makeText(getApplicationContext(), "Juz jesteś w tej grupie", Toast.LENGTH_LONG).show();
             else if (output == 2)
-                Toast.makeText(getApplicationContext(), "W innej i przepisano", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Byłeś już w grupie z tego przedmiotu, lecz zostałeś przepisany na żądanie", Toast.LENGTH_LONG).show();
             else if(output == 3)
-                Toast.makeText(getApplicationContext(), "Dopisano", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Zostałeś dopisany do wskazanej grupy", Toast.LENGTH_LONG).show();
+
+            if(output != 1)
+                finish();
         }
         else
         {
             Toast.makeText(getApplicationContext(), "Brak miejsca w wybraniej grupie", Toast.LENGTH_LONG).show();
         }
-
-        //sprawdzic czy grupa ma miejsce
-
-
-        //sprawdzic czy nie jest juz w grupie
-        //jesli jest to przepisz
-
-        //dodanie do grupy
     }
 }
