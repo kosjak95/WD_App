@@ -28,7 +28,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".JoinGroupActivity" />
-        <activity android:name=".ViewGroupsActivity"></activity>
+        <activity android:name=".ViewGroupsActivity" />
+        <activity android:name=".AddSubjectActivity" />
+        <activity android:name=".AddGroupActivity" />
+        <activity android:name=".AddStudentActivity"></activity>
     </application>
 
 </manifest>

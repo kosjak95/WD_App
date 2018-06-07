@@ -73,38 +73,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     Insert new student into database
      */
-    public void insertStudent()
+    public boolean insertStudent(String index, String pesel)
     {
         ContentValues values = new ContentValues();
 
         String query = "SELECT * From "+STUDENT_TABLE;
         Cursor cursor = db.rawQuery(query, null);
-        int count = cursor.getCount();
+        cursor.moveToLast();
 
-        values.put(COLUMN_ID, count);
-        values.put(COLUMN_INDEX, "128629");
-        values.put(COLUMN_PESEL, "12345678900");
+        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+        values.put(COLUMN_ID, ++id);
+        values.put(COLUMN_INDEX, index);
+        values.put(COLUMN_PESEL, pesel);
 
         db.insert(STUDENT_TABLE, null, values);
         db.close();
+
+        return true;
     }
 
     /*
     Insert new subject into database
      */
-    public void insertSubject()
+    public boolean insertSubject(String name)
     {
         ContentValues values = new ContentValues();
 
         String query = "SELECT * From "+SUBJECT_TABLE;
         Cursor cursor = db.rawQuery(query, null);
-        int count = cursor.getCount();
+        //int count = cursor.getCount();
 
-        values.put(COLUMN_ID, count);
-        values.put(COLUMN_SUBJECT, "Programowanie");
+        cursor.moveToLast();
+
+        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+        values.put(COLUMN_ID, ++id);
+        values.put(COLUMN_SUBJECT, name);
 
         db.insert(SUBJECT_TABLE, null, values);
         db.close();
+
+        return true;
     }
 
     /*
@@ -418,6 +428,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             cursor.moveToNext();
         }
+        return false;
+    }
+    public boolean isAdmin(String user_id)
+    {
+        String query = "SELECT " + COLUMN_ID + " FROM " + STUDENT_TABLE + " WHERE " + COLUMN_INDEX + " ='" + user_id + "'";
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+
+        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+        if(id == 0)
+            return true;
+
         return false;
     }
 }

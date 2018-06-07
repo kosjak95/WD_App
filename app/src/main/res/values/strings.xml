@@ -10,8 +10,13 @@
 
     <!-- Strings related to main page -->
     <string name="main_hello">Witaj Studencie!</string>
+    <string name="main_hello_admin">Witaj Administratorze!</string>
     <string name="button_add_to_group">Dołącz do grupy</string>
     <string name="view_my_gropus">Zobacz moje grupy</string>
+    <string name="WD_add_group">Dodaj grupę</string>
+    <string name="WD_add_subject">Dodaj przedmiot</string>
+    <string name="WD_add_student">Dodaj studenta</string>
+    <string name="WD_name_subject">Podaj nazwe przedmiotu</string>
 
     <!-- Strings related to join groupd page -->
     <string name="pick_out_group">Dopasuj swoje grupy</string>
@@ -19,13 +24,13 @@
 
     <!-- Strings related to login -->
     <string name="prompt_index">Index</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_password">Hasło</string>
     <string name="action_login">Login</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_index">This index is invalid</string>
-    <string name="error_invalid_password">This password is too short or too long</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_index">Indeks jest niepoprawny</string>
+    <string name="error_invalid_password">Hasło jest za krótkie lub za długie</string>
+    <string name="error_incorrect_password">Hasło jest niepoprawne</string>
+    <string name="error_field_required">To pole jest wymagane</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>

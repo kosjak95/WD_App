@@ -215,12 +215,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         showProgress(false);
     }
 
-    private boolean isIndexValid(String index) {
+    public boolean isIndexValid(String index) {
 
         return (index.length()==6 && index.matches("\\d+(?:\\d+)?"));
     }
 
-    private boolean isPasswordValid(String password) {
+    public boolean isPasswordValid(String password) {
 
         //PESEL GOT 11 numbers.
         if(password.length() != 11) {
