@@ -13,53 +13,58 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_hello"
-            android:textSize="20sp"
-            tools:layout_editor_absoluteX="120dp"
-            tools:layout_editor_absoluteY="151dp" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="124dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="108dp"
+        android:text="@string/main_hello"
+        android:textSize="20sp"
+        app:layout_anchorGravity="top|center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-        <Button
-            android:id="@+id/button_join"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="116dp"
-            android:layout_marginStart="116dp"
-            android:layout_marginTop="60dp"
-            android:onClick="onClick"
-            android:text="@string/button_add_to_group"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+    <Button
+        android:id="@+id/button_join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="116dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="45dp"
+        android:onClick="onClick"
+        android:text="@string/button_add_to_group"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <Button
-            android:id="@+id/button_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="108dp"
-            android:layout_marginStart="108dp"
-            android:layout_marginTop="36dp"
-            android:onClick="onClick"
-            android:text="@string/view_my_gropus"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_join" />
+    <Button
+        android:id="@+id/button_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="108dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="30dp"
+        android:onClick="onClick"
+        android:text="@string/view_my_gropus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_join" />
 
 
-        <Button
-            android:id="@+id/button_add_student"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:layout_marginLeft="116dp"
-            android:layout_marginStart="116dp"
-            android:layout_marginTop="36dp"
-            android:onClick="onClick"
-            android:text="@string/WD_add_student"
-            android:visibility="invisible"
-            app:layout_anchorGravity="center_horizontal|bottom"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_view" />
+    <Button
+        android:id="@+id/button_add_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginLeft="116dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="30dp"
+        android:onClick="onClick"
+        android:text="@string/WD_add_student"
+        android:visibility="invisible"
+        app:layout_anchorGravity="center_horizontal|bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_view" />
 
 </android.support.constraint.ConstraintLayout>

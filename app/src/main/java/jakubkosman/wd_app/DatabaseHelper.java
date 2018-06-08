@@ -120,18 +120,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     Insert new subject group into database
      */
-    public void insertGroup()
+    public void insertGroup(String subject, String code, int vaccancy)
     {
         ContentValues values = new ContentValues();
 
-        String query = "SELECT * From "+GROUP_TABLE;
+        String query = "SELECT " + COLUMN_ID + " FROM " + SUBJECT_TABLE + " WHERE " + COLUMN_SUBJECT + " ='" + subject + "'";
         Cursor cursor = db.rawQuery(query, null);
-        int count = cursor.getCount();
+        cursor.moveToFirst();
+        int sub_id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
 
-        values.put(COLUMN_ID, count);
-        values.put(COLUMN_GROUP_SIGNATURE, "GR02");
-        values.put(COLUMN_GROUP_VACANCY, 30);
-        values.put(SUBJECT_ID_FOREIGN, 1);
+        query = "SELECT * From "+GROUP_TABLE;
+        cursor = db.rawQuery(query, null);
+        cursor.moveToLast();
+        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+        values.put(COLUMN_ID, ++id);
+        values.put(COLUMN_GROUP_SIGNATURE, code);
+        values.put(COLUMN_GROUP_VACANCY, vaccancy);
+        values.put(SUBJECT_ID_FOREIGN, sub_id);
 
         db.insert(GROUP_TABLE, null, values);
         db.close();

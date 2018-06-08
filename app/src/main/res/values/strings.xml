@@ -10,13 +10,15 @@
 
     <!-- Strings related to main page -->
     <string name="main_hello">Witaj Studencie!</string>
-    <string name="main_hello_admin">Witaj Administratorze!</string>
+    <string name="main_hello_admin">Administrator:</string>
     <string name="button_add_to_group">Dołącz do grupy</string>
     <string name="view_my_gropus">Zobacz moje grupy</string>
-    <string name="WD_add_group">Dodaj grupę</string>
     <string name="WD_add_subject">Dodaj przedmiot</string>
     <string name="WD_add_student">Dodaj studenta</string>
     <string name="WD_name_subject">Podaj nazwe przedmiotu</string>
+    <string name="WD_insert_code">Wprowadz kod grupy</string>
+    <string name="WD_insert_vaccancy">Podaj maksymalną liczebność grupy</string>
+    <string name="WD_add_group">Dodaj nową grupę</string>
 
     <!-- Strings related to join groupd page -->
     <string name="pick_out_group">Dopasuj swoje grupy</string>
