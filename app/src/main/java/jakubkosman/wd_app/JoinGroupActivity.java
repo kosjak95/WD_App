@@ -61,7 +61,14 @@ public class JoinGroupActivity extends AppCompatActivity {
     {
         DatabaseHelper db = new DatabaseHelper(this);
         String subject = spinnerSubjects.getSelectedItem().toString();
-        String group = spinnerGroups.getSelectedItem().toString();
+        String group = "";
+        if(spinnerGroups.getSelectedItem() != null)
+            spinnerGroups.getSelectedItem().toString();
+
+
+
+        if(subject.equals("") || group.equals(""))
+            return;
 
         if(db.isVacancy(subject,group))
         {

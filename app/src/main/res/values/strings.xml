@@ -19,6 +19,8 @@
     <string name="WD_insert_code">Wprowadz kod grupy</string>
     <string name="WD_insert_vaccancy">Podaj maksymalną liczebność grupy</string>
     <string name="WD_add_group">Dodaj nową grupę</string>
+    <string name="WD_delete_group">Usuń grupę</string>
+    <string name="WD_delete_label">Wybierz grupę do usunięcia</string>
 
     <!-- Strings related to join groupd page -->
     <string name="pick_out_group">Dopasuj swoje grupy</string>

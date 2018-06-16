@@ -186,9 +186,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.update(GROUP_TABLE, values, COLUMN_ID + "=?", new String[]{row});
     }
-    public void delete()
+
+    /*
+    Delete for connector rows connected with given subject
+     */
+    public void deleteRow(String group_id)
     {
-        db.execSQL("DELETE FROM connector WHERE ID > 0");
+//        db.execSQL("DELETE FROM connector WHERE ID > 0");
+
+
+        db.delete(CONNECTOR_TABLE, "groupID=?", new String[]{group_id});
     }
 
     /*
@@ -449,5 +456,74 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
 
         return false;
+    }
+
+    public List<String> getSubjectAndGroups() {
+
+        List<String> list = new ArrayList<>();
+
+        String query = "SELECT * FROM " + SUBJECT_TABLE;
+
+        Cursor group = null;
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while(!c.isAfterLast())
+        {
+            String subject = c.getString(c.getColumnIndex(COLUMN_SUBJECT));
+            int id = c.getInt(c.getColumnIndex(COLUMN_ID));
+
+            String query2 = "SELECT " + COLUMN_GROUP_SIGNATURE + " FROM " + GROUP_TABLE + " WHERE " + SUBJECT_ID_FOREIGN + " = " + id;
+            group = db.rawQuery(query2, null);
+            group.moveToFirst();
+
+            while(!group.isAfterLast())
+            {
+                String group_signature = group.getString(group.getColumnIndex(COLUMN_GROUP_SIGNATURE));
+                String output = subject + " " + group_signature;
+
+                list.add(output);
+
+                group.moveToNext();
+            }
+
+            c.moveToNext();
+        }
+        c.close();
+        group.close();
+        return list;
+    }
+
+    /*
+    Delete group - admin option let him completly delete groups and all connector of students with this group
+     */
+    public void deleteGroup(String selected) {
+
+        String[] separated = selected.split(" ");
+        String subject = separated[0];
+        String group = separated[1];
+
+        String query = "SELECT " + COLUMN_ID + " FROM " + SUBJECT_TABLE + " WHERE " + COLUMN_SUBJECT + "='" + subject + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+        //query = "DELETE FROM " + GROUP_TABLE + " WHERE " + SUBJECT_ID_FOREIGN + "=" + id + " AND " + COLUMN_GROUP_SIGNATURE + "='" + group + "'";
+        query = "SELECT " + COLUMN_ID + " FROM " + GROUP_TABLE + " WHERE " + SUBJECT_ID_FOREIGN + "=" + id + " AND " + COLUMN_GROUP_SIGNATURE + "='" + group + "'";
+
+        cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        int group_id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+        String string_group_id = Integer.toString(group_id);
+
+        deleteRow(string_group_id);
+
+        db.delete(GROUP_TABLE, COLUMN_ID + " =?", new String[]{string_group_id});
+
+        cursor.close();
     }
 }

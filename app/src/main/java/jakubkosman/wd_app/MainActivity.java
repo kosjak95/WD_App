@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button1;
     private Button button2;
     private Button button3;
+    private Button button4;
     private TextView textView;
 
     @Override
@@ -30,17 +31,25 @@ public class MainActivity extends AppCompatActivity {
 
         //decide is user_id in admin mode
         DatabaseHelper db = new DatabaseHelper(this);
+
+        button1 = (Button) findViewById(R.id.button_join);
+        button2 = (Button) findViewById(R.id.button_view);
+        button3 = (Button) findViewById(R.id.button_add_student);
+        button4 = (Button) findViewById(R.id.button_delete_group);
+        textView = (TextView) findViewById(R.id.textView);
+
         admin = db.isAdmin(user_index);
         if (admin) {
-            button1 = (Button) findViewById(R.id.button_join);
-            button2 = (Button) findViewById(R.id.button_view);
-            button3 = (Button)findViewById(R.id.button_add_student);
-            textView = (TextView)findViewById(R.id.textView);
-
             button1.setText(R.string.WD_add_subject);
             button2.setText(R.string.WD_add_group);
             button3.setVisibility(View.VISIBLE);
+            button4.setVisibility(View.VISIBLE);
             textView.setText(R.string.main_hello_admin);
+        }
+        else
+        {
+            button3.setVisibility(View.INVISIBLE);
+            button4.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -92,7 +101,11 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("indexKey",user_index);
                 startActivity(intent);
                 break;
-            
+            case R.id.button_delete_group:
+                intent = new Intent(MainActivity.this, DeleteGroupActivity.class);
+                intent.putExtra("indexKey",user_index);
+                startActivity(intent);
+                break;
         }
 
     }

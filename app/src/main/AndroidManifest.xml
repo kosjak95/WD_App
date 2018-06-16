@@ -31,7 +31,8 @@
         <activity android:name=".ViewGroupsActivity" />
         <activity android:name=".AddSubjectActivity" />
         <activity android:name=".AddGroupActivity" />
-        <activity android:name=".AddStudentActivity"></activity>
+        <activity android:name=".AddStudentActivity" />
+        <activity android:name=".DeleteGroupActivity"></activity>
     </application>
 
 </manifest>
