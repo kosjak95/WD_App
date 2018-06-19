@@ -63,7 +63,7 @@ public class JoinGroupActivity extends AppCompatActivity {
         String subject = spinnerSubjects.getSelectedItem().toString();
         String group = "";
         if(spinnerGroups.getSelectedItem() != null)
-            spinnerGroups.getSelectedItem().toString();
+            group = spinnerGroups.getSelectedItem().toString();
 
 
 

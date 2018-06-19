@@ -428,8 +428,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             if(temp_cursor.getCount() > 0)
             {
-                String id = Integer.toString(temp_group);
-                db.delete(CONNECTOR_TABLE, COLUMN_ID + " =?", new String[]{id});
+                String id = temp_cursor.getString(temp_cursor.getColumnIndex(COLUMN_ID));
+                db.delete(CONNECTOR_TABLE, COLUMN_ID + "=?", new String[]{id});
 
                 changeVaccancy(temp_group, true);
                 insertConnector(user_id, group_id);

@@ -29,7 +29,7 @@ public class AddSubjectActivity extends AppCompatActivity {
         String name = sub_name.getText().toString();
         if(name.length() > 0 )
             if(db.insertSubject(name))
-                Toast.makeText(getApplicationContext(), "Pomyślnie dodano grupę", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Pomyślnie dodano przedmiot", Toast.LENGTH_LONG).show();
         finish();
 
     }
