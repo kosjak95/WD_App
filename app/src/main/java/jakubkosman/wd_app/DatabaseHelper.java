@@ -83,13 +83,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int id = -1;
         if(cursor.getCount() > 0)
-            cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
 
         values.put(COLUMN_ID, ++id);
         values.put(COLUMN_INDEX, index);
         values.put(COLUMN_PESEL, pesel);
 
         db.insert(STUDENT_TABLE, null, values);
+        cursor.close();
         db.close();
 
         return true;
@@ -108,12 +109,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.moveToLast();
 
-        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+        int id = -1;
+        if(cursor.getCount() > 0)
+            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
 
         values.put(COLUMN_ID, ++id);
         values.put(COLUMN_SUBJECT, name);
 
         db.insert(SUBJECT_TABLE, null, values);
+        cursor.close();
         db.close();
 
         return true;
@@ -134,7 +138,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         query = "SELECT * From "+GROUP_TABLE;
         cursor = db.rawQuery(query, null);
         cursor.moveToLast();
-        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+        int id = -1;
+        if(cursor.getCount() > 0)
+            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
 
         values.put(COLUMN_ID, ++id);
         values.put(COLUMN_GROUP_SIGNATURE, code);
@@ -142,6 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(SUBJECT_ID_FOREIGN, sub_id);
 
         db.insert(GROUP_TABLE, null, values);
+        cursor.close();
         db.close();
     }
 
@@ -157,7 +164,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.moveToLast();
 
-        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+        int id = -1;
+        if(cursor.getCount() > 0)
+            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
 
         //@DONE: tutaj nie mozna brac counta, bo jak bedziemy przepisywac gosci, to pewnie sypną sie idiki, i wtedy count nie bedzie pokrywal się z tym jaki powinien zostać wstawiony nastepny  ....???
 
@@ -167,6 +176,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert(CONNECTOR_TABLE, null, values);
         changeVaccancy(group_id, false);
+        cursor.close();
         db.close();
     }
     /*
@@ -187,6 +197,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String row = String.valueOf(group_id);
 
         db.update(GROUP_TABLE, values, COLUMN_ID + "=?", new String[]{row});
+        cursor.close();
+        db.close();
     }
 
     /*
@@ -220,8 +232,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
 
-        String[] groups = new String[c.getCount()];
-
         while(!c.isAfterLast())
         {
             int  group_id = c.getInt(c.getColumnIndex("groupID"));
@@ -250,8 +260,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean checkUser(String index, String password)
     {
         String query = "SELECT "+COLUMN_ID+" FROM "+STUDENT_TABLE+" WHERE "+COLUMN_INDEX+" = '"+index+"' AND "+COLUMN_PESEL+" = '"+password+"'";
-        Cursor cursor = db.rawQuery(query,null);
+        Cursor cursor = this.getWritableDatabase().rawQuery(query,null);
         int count = cursor.getCount();
+        cursor.close();
         if(count>0)
             return true;
         else
@@ -378,6 +389,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         int group_id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
 
+        cursor.close();
 
         if(isInThisGroup(user_id, group_id))
             return 1;
@@ -401,9 +413,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
 
-        if(cursor.getCount()>0)
+        if(cursor.getCount()>0) {
+            cursor.close();
             return true;
-
+        }
+        cursor.close();
         return false;
     }
 
@@ -436,13 +450,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 changeVaccancy(temp_group, true);
                 insertConnector(user_id, group_id);
 
+                temp_cursor.close();
+                cursor.close();
+
                 return true;
 
             }
 
-
             cursor.moveToNext();
         }
+        cursor.close();
         return false;
     }
     public boolean isAdmin(String user_id)
@@ -453,6 +470,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+
+        cursor.close();
 
         if(id == 0)
             return true;
@@ -492,7 +511,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToNext();
         }
         c.close();
-        group.close();
+        if(group!=null)
+            group.close();
         return list;
     }
 
@@ -536,9 +556,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
 
-        if(cursor.getCount() == 0)
+        if(cursor.getCount() == 0) {
+            cursor.close();
             return false;
-
+        }
+        cursor.close();
         return true;
     }
 }
