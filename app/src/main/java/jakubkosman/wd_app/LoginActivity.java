@@ -98,7 +98,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
 
         databaseHelper = new DatabaseHelper(this);
-        //databaseHelper.insertStudent();
+        if(!databaseHelper.isAnyUser()) {
+
+            String default_index = "111111";
+            String default_pesel = "11111111111";
+            databaseHelper.insertStudent(default_index, default_pesel);
+        }
 //        databaseHelper.insertSubject();
         //databaseHelper.insertGroup();
 //        databaseHelper.insertConnector();

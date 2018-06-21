@@ -81,7 +81,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToLast();
 
-        int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+        int id = -1;
+        if(cursor.getCount() > 0)
+            cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
 
         values.put(COLUMN_ID, ++id);
         values.put(COLUMN_INDEX, index);
@@ -525,5 +527,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(GROUP_TABLE, COLUMN_ID + " =?", new String[]{string_group_id});
 
         cursor.close();
+    }
+
+    public boolean isAnyUser() {
+
+        String query = "SELECT " + COLUMN_ID + " FROM " + STUDENT_TABLE;
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+
+        if(cursor.getCount() == 0)
+            return false;
+
+        return true;
     }
 }
