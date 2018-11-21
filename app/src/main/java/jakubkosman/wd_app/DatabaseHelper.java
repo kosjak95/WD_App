@@ -198,7 +198,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.update(GROUP_TABLE, values, COLUMN_ID + "=?", new String[]{row});
         cursor.close();
-        db.close();
+        //db.close();
     }
 
     /*
@@ -355,7 +355,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int vacancy = cursor.getInt(cursor.getColumnIndex(COLUMN_GROUP_VACANCY));
 
         cursor.close();
-        if(vacancy<0)
+        if(vacancy<=0)
             return false;
         else
             return true;
